@@ -78,34 +78,52 @@ class index {
 
 
     crearDepartamento() {
-        let obj = new organigrama();
-        obj.id = 5;
+        console.log("Creando departamentos");
+        let organigrama = {
+            id: prompt("Ingrese el id"),
+            nombre: prompt("Ingrese el nombre"),
+            descripcion: prompt("Ingrese la descripcion"),
+            parent: prompt("Ingrese el parent")
+        };     
 
-        console.log(obj.id);
+        this.departamentos.push(organigrama);
+    }
 
-        departamentos = [];
+    mostrarDepartamentos() {
+        if (this.departamentos.length == 0)
+            console.log("No hay departamentos");
+        else {
+            for(let d of this.departamentos) {
+                console.log("Id: " + d.id);
+                console.log("Nombre: " + d.nombre);
+                console.log("Descripcion: " + d.descripcion);
+                console.log("Parent" + d.parent);
+            }
+        }
     }
 
     mostrarOpciones() {
         let bandera = true;
         while(bandera) {
+            this.mostrarDepartamentos();
             console.log("Menu de opciones");
-            console.log("1 -> Agregar departamento");
-            console.log("2 -> Seleccionar departamento");
-            console.log("3 -> Salir");
+            console.log("a) Agregar departamento");
+            console.log("b) Seleccionar departamento");
+            console.log("c) Salir");
 
-            let op = prompt("Digite una opción:") 
+            let op = prompt("Digite una opción:");
             
             switch(op) {
-                case '1':
+                case 'a':
+                    //console.log("Creando departamentos");
+                    this.crearDepartamento();
+                break;
+
+                case 'b':
 
                 break;
 
-                case '2':
-
-                break;
-
-                case '3':
+                case 'c':
                     bandera = false;
                     console.log("Salio del programa");
                 break;
@@ -122,45 +140,45 @@ class index {
     }
 }
 
-class organigrama {
+/*class organigrama {
   constructor() {
     this.id = 0;
     this.nombre = "";
     this.descripcion = "";
-    this.parent = "";
+    this.parent = 0;
   }
 
-  get id() {
+  getId() {
     return this.id;
   }
 
-  set id(id) {
+  setId(id) {
     this.id = id;
   }
 
-  get nombre() {
+  getNombre() {
     return this.nombre;
   }
 
-  set nombre(nombre) {
+  setNombre(nombre) {
     this.nombre = nombre;
   }
 
-  get descripcion() {
+  getDescripcion() {
     return this.descripcion;
   }
 
-  set descripcion(descripcion) {
+  setDescripcion(descripcion) {
     this.descripcion = descripcion;
   }
 
-  get parent() {
+  getParent() {
     return this.parent;
   }
 
-  set parent(parent) {
+  setParent(parent) {
     this.parent = parent;
   }
 }
-
+*/
 window.onload = () => new index();
