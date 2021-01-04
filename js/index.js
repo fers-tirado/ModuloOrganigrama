@@ -1,184 +1,147 @@
-/*
-DEPARTAMENTO: DIRECCIÓN GENERAL
-DESCENDIENTES: 
-- DIRECCIÓN GENERAL
-- SECRETARIA DIRECCIÓN GENERAL
-- CENTRO DE INNOVACIÓN Y TRANSFERENCIA DE TECNOLOGÍA
-
-DEPARTAMENTO: DIRECCIÓN ADMINISTRATIVA
-DESCENDIENTES: 
-- DIRECCIÓN ADMINISTRATIVA
-- RECURSOS FINANCIEROS
-- RECURSOS HUMANOS
-- RECURSOS MATERIALES Y SERVICIOS GENERALES
-
-DEPARTAMENTO: DIRECCIÓN DE PLANEACIÓN Y VINCULACIÓN
-DESCENDIENTES:
-- DIRECCIÓN DE PLANEACIÓN Y VINCULACIÓN
-- SECRETARÍA DE DIRECCIÓN DE PLANEACIÓN Y VINCULACIÓN
-- SUBDIRECCIÓN DE VINCULACIÓN
-    - COORDINACIÓN DE EGRESADOS
-    - OFICINA DE SERVICIO SOCIAL
-- SISTEMA DE GESTIÓN INTEGRAL (SGC Y SGA)
-- BECAS
-    - PROGRAMACIÓN Y PRESUPUESTOS
-    - COMUNICACIÓN Y DIFUSIÓN
-- ACTIVIDADES EXTRAESCOLARES
-- SERVICIOS ESCOLARES
-- SECRETARIAS DE SERVICIOS ESCOLARES
-- CENTRO DE INFORMACIÓN
-
-DEPARTAMENTO: DIRECCIÓN ACADÉMICA
-DESCENDIENTES:
-- DIRECCIÓN ACADÉMICA
-- SECRETARIA DE DIRECCIÓN ACADÉMICA
-- COORDINACIÓN DE POSGRADOS
-- DIVISIÓN DE ESTUDIOS PROFESIONALES
-- JEFATURA DE INGENIERÍA EN SISTEMAS COMPUTACIONALES
-- JEFATURA DE INGENIERÍA ELECTROMECÁNICA
-- JEFATURA DE INGENIERÍA CIVIL
-- JEFATURA DE INGENIERÍA INDUSTRIAL
-- JEFATURA DE INGENIERÍA BIOQUÍMICA
-- JEFATURA DE INGENIERÍA AMBIENTAL
-- JEFATURA DE INGENIERÍA EN TECNOLOGÍAS DE LA INFORMACIÓN Y COMUNICACIONES
-- JEFATURA DE INGENIERÍA PETROLERA
-- JEFATURA DE INGENIERÍA EN GESTIÓN EMPRESARIAL
-- DESARROLLO ACADÉMICO 
-    - ORIENTACIÓN EDUCATIVA
-    - PROGRAMA DE TUTORÍAS
-    - FORMACIÓN Y ACTUALIZACIÓN DOCENTE
-- SISTEMATIZACIÓN Y REDES
-- LABORATORIO DE ELECTRÓNICA
-- LABORATORIO DE QUÍMICA
-- LABORATORIO DE INVESTIGACIÓN AVANZADA
-- NAVE INDUSTRIAL
-- COORDINACIÓN DE LENGUAS EXTRANJERAS
-- CIENCIAS BÁSICAS
-- PSICOLOGO
-- SALA DE MAESTROS 1
-- SALA DE MAESTROS 2
-
-DEPARTAMENTO: SUBDIRECCIÓN SISTEMA ABIERTO
-DESCENDIENTES:
-- SUBDIRECCIÓN DEL SISTEMA ABIERTO
-- SECRETARIA DE LA SUBDIRECCIÓN DEL SISTEMA ABIERTO
-- COORDINADORA DE INGENIERÍA INDUSTRIAL
-- COORDINADOR DE INGENIERÍA EN SISTEMAS COMPUTACIONALES
-- COORDINADORA DE INGENIERÍA EN GESTIÓN EMPRESARIAL
-- ENCARGADO DEL SERVICIO SOCIAL DEL SISTEMA ABIERTO
-- ENCARGADA DEL IDIOMA INGLÉS DEL SISTEMA ABIERTO 
-*/
 class index {
     constructor() {
-        console.log("--- Comienzo programa ---");
         this.departamentos = [];
-        this.mostrarOpciones();
+        this.i = 1;
+        this.p = 0;
+
+        this.mostrarMenu();
     }
 
+    buscarId(id) {
+        for (let d of this.departamentos) {
+            if (id == d.id) return true;
+        }
+        return false;
+    }
 
+    buscarDepartamentos(id) {
+        for (let d of this.departamentos) {
+          if (id == d.parent) return true;
+        }
+        return false;
+    }
 
     crearDepartamento() {
-        console.log("Creando departamentos");
-        let organigrama = {
-            id: prompt("Ingrese el id"),
-            nombre: prompt("Ingrese el nombre"),
-            descripcion: prompt("Ingrese la descripcion"),
-            parent: prompt("Ingrese el parent")
-        };     
+        const prompt = require("prompt-sync")();
 
+        console.log("\nCreando departamento...\n");
+        let organigrama = {
+            id: this.i,
+            nombre: prompt("Ingrese el nombre: "),
+            descripcion: prompt("Ingrese la descripcion: "),
+            parent: this.p
+        };     
+        this.i += 1;
         this.departamentos.push(organigrama);
+    }
+
+    editarDepartamento(id) {
+        const prompt = require("prompt-sync")();
+
+        console.log("\nEditando departamento...\n");
+        for (let d of this.departamentos) {
+            if (id == d.id) {
+                d.nombre = prompt("Edite el nombre: ");
+                d.descripcion = prompt("Edite la descripcion: ");
+            }
+        }
+    }
+
+    eliminarDepartamento(id) {
+        console.log("\nEliminando departamento...");
+        let j = 0;
+        for (let d of this.departamentos) {
+            if (id == d.id) this.departamentos.splice(j, 1);
+            j += 1;
+        }
     }
 
     mostrarDepartamentos() {
         if (this.departamentos.length == 0)
-            console.log("No hay departamentos");
+            console.log("\n* Sin departamentos *");
         else {
             for(let d of this.departamentos) {
-                console.log("Id: " + d.id);
-                console.log("Nombre: " + d.nombre);
-                console.log("Descripcion: " + d.descripcion);
-                console.log("Parent" + d.parent);
+                if (this.p == d.id) {
+                  console.log("\n\t-> ANCESTRO <-");
+                  console.log("Id: " + d.id);
+                  console.log("Nombre: " + d.nombre);
+                  console.log("Descripcion: " + d.descripcion);
+                  console.log("Parent: " + d.parent);
+                }
+
+                if (d.parent == this.p) {
+                    console.log("\n-----------------------------");
+                    console.log("Id: " + d.id);
+                    console.log("Nombre: " + d.nombre);
+                    console.log("Descripcion: " + d.descripcion);
+                    console.log("Parent: " + d.parent);
+                }
             }
         }
     }
 
-    mostrarOpciones() {
+    mostrarMenu() {
+        const prompt = require("prompt-sync")();
+
+        let aux = 0;
         let bandera = true;
+
         while(bandera) {
+            
             this.mostrarDepartamentos();
-            console.log("Menu de opciones");
+
+            console.log("\n\tMenu");
             console.log("a) Agregar departamento");
             console.log("b) Seleccionar departamento");
-            console.log("c) Salir");
+            console.log("c) Editar departamento");
+            console.log("d) Eliminar departamento");
+            console.log("e) Salir\n");
 
-            let op = prompt("Digite una opción:");
-            
-            switch(op) {
-                case 'a':
-                    //console.log("Creando departamentos");
-                    this.crearDepartamento();
-                break;
+            let op = prompt("Digite una opción: ");
 
-                case 'b':
+            if (op == 'a') this.crearDepartamento();
 
-                break;
+            else if (op == 'b') {
+                    console.log(" ");
+                    let id = prompt("Seleccione el id: ");
 
-                case 'c':
-                    bandera = false;
-                    console.log("Salio del programa");
-                break;
-
-                default:
-                    console.log("La opcion no se encuentra en el menu");
-                break;    
+                    if (this.buscarId(id)) {
+                        aux = this.p;
+                        this.p = id;
+                        this.mostrarMenu();
+                    }
+                    else console.log("** Id no permitido **")
+                
             }
+            else if (op == 'c') {
+                console.log(" ");
+                let id = prompt("Seleccione el id: ");
+
+                if (this.buscarId(id)) this.editarDepartamento(id);
+                else console.log("** Id no permitido **");
+
+            }
+            else if (op == 'd') {
+                console.log(" ");
+                let id = prompt("Seleccione el id: ");
+
+                if (this.buscarId(id)) {
+                    if (this.buscarDepartamentos(id)) console.log("\n** No se puede eliminar **");
+                    else this.eliminarDepartamento(id);
+                } 
+                else console.log("** Id no permitido **")
+            }
+            else if (op == 'e') {
+                this.p = aux;
+                bandera = false;
+                console.log("\n** Saliendo... **");
+            }
+            else console.log("\nLa opcion no se encuentra en el menu");
         }
     }
-
-    generarIdAleatorio() {
-        return Math.floor((Math.random() * 10) + 0);
-    }
 }
 
-/*class organigrama {
-  constructor() {
-    this.id = 0;
-    this.nombre = "";
-    this.descripcion = "";
-    this.parent = 0;
-  }
+function principal() { new index(); }
 
-  getId() {
-    return this.id;
-  }
-
-  setId(id) {
-    this.id = id;
-  }
-
-  getNombre() {
-    return this.nombre;
-  }
-
-  setNombre(nombre) {
-    this.nombre = nombre;
-  }
-
-  getDescripcion() {
-    return this.descripcion;
-  }
-
-  setDescripcion(descripcion) {
-    this.descripcion = descripcion;
-  }
-
-  getParent() {
-    return this.parent;
-  }
-
-  setParent(parent) {
-    this.parent = parent;
-  }
-}
-*/
-window.onload = () => new index();
+principal();
+//window.onload = () => new index();
