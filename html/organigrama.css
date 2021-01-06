@@ -1,0 +1,74 @@
+body {
+    font-family: Arial;
+}
+
+/*ESTILOS GENERALES*/
+main ul {
+    /*Implementando GRID
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    /*list-style-type: none;*/
+    list-style: none;
+    padding: 0;
+}
+main li {
+    line-height: 3rem;
+    position: relative;
+}
+/*main li*/ .menu ul {
+    /*position: absolute;*/
+    position: relative;
+}
+main a {
+    font-size: small;
+    color: #ddd;
+    display: block;
+    /*padding: 0 2.5em;*/
+    padding: 0 1em;
+    text-decoration: none;
+    transition: .4s
+}
+main a:hover {
+    background: rgba(0,0,0,.5);
+}
+/*main li ul {
+  display: none;
+}
+main li:hover > ul {
+  display: block;
+} */
+
+/*PRIMER NIVEL*/
+/*main > ul*/ .menu {
+  background: #333;
+  /*overflow: hidden; -> No conveniente*/
+  display: table;
+  width: 100%;
+}
+/*main > ul*/ .menu > li {
+    float: left;
+}
+
+/*SEGUNDO NIVEL*/
+main li li {
+  background: #222;
+  max-height: 0;
+  overflow: hidden;
+  transition: all .4s;
+  width: 200px;
+}
+main li:hover > ul > li {
+  display: table;
+  /*float: left;*/
+  max-height: 500px;
+  overflow: visible;
+}
+/*main > ul*/ .menu > li > ul {
+    top: 100%;
+}
+
+/*TERCER NIVEL*/
+/*main ul*/ .menu ul ul {
+  left: 100%;
+  top: 0;
+}
