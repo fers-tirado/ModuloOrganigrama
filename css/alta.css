@@ -1,0 +1,9 @@
+*{
+    font-family: Arial;
+}
+
+body{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
